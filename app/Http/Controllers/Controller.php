@@ -9,7 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
 
 /**
  * @OA\Info(
- *    title="dssd-unlp-2021-grupo11-backend",
+ *    title="dssd-unlp-2021-grupo11-monitoreo-service",
  *    version="1.0.0",
  * )
  * 

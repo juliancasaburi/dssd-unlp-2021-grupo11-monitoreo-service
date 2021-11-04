@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ProcessController;
+use App\Http\Controllers\Api\CaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,7 @@ use App\Http\Controllers\Api\UserController;
 */
 
 /* Auth */
+Route::post('auth/login', [AuthController::class, 'login']);
 
 /* JWT protected routes */
 Route::group(['middleware' => ['apiJwt']], function () {
@@ -26,4 +29,12 @@ Route::group(['middleware' => ['apiJwt']], function () {
 Route::group(['middleware' => ['bonitaProtectedRoute']], function () {
     /* Auth */
     Route::post('auth/logout', [AuthController::class, 'logout']);
+    
+    /* Process */
+    Route::get('process', [ProcessController::class, 'getProcesses']);
+
+    /* Case */
+    Route::get('activeCase', [CaseController::class, 'getActiveCases']);
+    Route::get('archivedCase', [CaseController::class, 'getArchivedCases']);
+    Route::get('activeCaseCount', [CaseController::class, 'getActiveCaseCount']);
 });

@@ -98,7 +98,7 @@ class AuthController extends Controller
      *
      * @OA\Post(
      *    path="/api/auth/logout",
-     *    summary="Login",
+     *    summary="Logout",
      *    description="Logout",
      *    operationId="authLogout",
      *    tags={"auth"},
@@ -126,12 +126,10 @@ class AuthController extends Controller
             if ($response->status() == 401)
                 return response()->json("401 Unauthorized", 401);
 
-            return response()->json("Logged out", 200);
+            return response()->json(['message' => 'Successfully logged out'], 200);
         } catch (ConnectionException $e) {
             return response()->json("500 Internal Server Error", 500);
         }
-
-        return response()->json(['message' => 'Successfully logged out']);
     }
 
 
