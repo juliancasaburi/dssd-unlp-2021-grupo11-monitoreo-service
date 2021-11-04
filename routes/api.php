@@ -37,4 +37,5 @@ Route::group(['middleware' => ['bonitaProtectedRoute']], function () {
     Route::get('activeCase', [CaseController::class, 'getActiveCases']);
     Route::get('archivedCase', [CaseController::class, 'getArchivedCases']);
     Route::get('activeCaseCount', [CaseController::class, 'getActiveCaseCount']);
+    Route::get('averageCaseTime', [CaseController::class, 'getAverageCaseTime']);
 });

@@ -250,6 +250,47 @@
                 }
             }
         },
+        "/api/averageCaseTime": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get average resolution time",
+                "description": "Get average resolution time",
+                "operationId": "getAverageCaseTime",
+                "responses": {
+                    "200": {
+                        "description": "Average case time",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "401 Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "error": "Unauthorized"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "500 internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "500 internal server error"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/process": {
             "post": {
                 "tags": [
