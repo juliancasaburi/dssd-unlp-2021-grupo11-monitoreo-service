@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\CaseController;
 */
 
 /* Auth */
+
 Route::post('auth/login', [AuthController::class, 'login']);
 
 /* JWT protected routes */
@@ -29,7 +30,10 @@ Route::group(['middleware' => ['apiJwt']], function () {
 Route::group(['middleware' => ['bonitaProtectedRoute']], function () {
     /* Auth */
     Route::post('auth/logout', [AuthController::class, 'logout']);
-    
+
+    /* User */
+    Route::get('user', [UserController::class, 'getUsers']);
+
     /* Process */
     Route::get('process', [ProcessController::class, 'getProcesses']);
 

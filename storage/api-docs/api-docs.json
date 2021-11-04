@@ -331,6 +331,47 @@
                     }
                 }
             }
+        },
+        "/api/user": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get users",
+                "description": "Get users",
+                "operationId": "getUsers",
+                "responses": {
+                    "200": {
+                        "description": "Users",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "401 Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "error": "Unauthorized"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "500 internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "500 internal server error"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
