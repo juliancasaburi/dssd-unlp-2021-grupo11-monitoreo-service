@@ -77,9 +77,35 @@ class AuthController extends Controller
 
         try {
             $urlHelper = new URLHelper();
-            $apiUrl = $urlHelper->getBonitaEndpointURL('/loginservice');
+            $apiLoginUrl = $urlHelper->getBonitaEndpointURL('/loginservice');
 
-            $response = Http::asForm()->post($apiUrl, [
+            $bonitaLoginResponse = Http::asForm()->post($apiLoginUrl, [
+                'username' => config('services.bonita.admin_user'),
+                'password' => config('services.bonita.admin_password'),
+                'redirect' => 'false',
+            ]);
+            if ($bonitaLoginResponse->status() != 204)
+                return response()->json("500 Internal Server Error", 500);
+            
+            $jsessionid = $bonitaLoginResponse->cookies()->toArray()[1]['Value'];
+            $xBonitaAPIToken = $bonitaLoginResponse->cookies()->toArray()[2]['Value'];
+
+            $userData = Http::withHeaders([
+                'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
+                'X-Bonita-API-Token' => $xBonitaAPIToken,
+            ])->get($urlHelper->getBonitaEndpointURL("/API/identity/user?s={$credentials['username']}&f=enabled=true"));
+
+            $userId = head($userData->json())['id'];
+
+            $membershipData = Http::withHeaders([
+                'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
+                'X-Bonita-API-Token' => $xBonitaAPIToken,
+            ])->get($urlHelper->getBonitaEndpointURL("/API/identity/membership?p=0&c=10&f=user_id={$userId}&d=role_id"));
+
+            if(head($membershipData->json())['role_id']["displayName"] != 'Admin')
+                return response()->json("403 Forbidden", 403);
+
+            $response = Http::asForm()->post($apiLoginUrl, [
                 'username' => $credentials["username"],
                 'password' => $credentials['password'],
                 'redirect' => 'false',
