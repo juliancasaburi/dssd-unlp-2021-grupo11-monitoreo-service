@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProcessController;
 use App\Http\Controllers\Api\CaseController;
+use App\Http\Controllers\Api\StatsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +43,8 @@ Route::group(['middleware' => ['bonitaProtectedRoute']], function () {
     Route::get('archivedCase', [CaseController::class, 'getArchivedCases']);
     Route::get('activeCaseCount', [CaseController::class, 'getActiveCaseCount']);
     Route::get('averageCaseTime', [CaseController::class, 'getAverageCaseTime']);
+
+    /* Stats */
+    Route::get('stats/cantidadRechazosLegales', [StatsController::class, 'getcantidadRechazosLegales']);
+    Route::get('stats/cantidadRechazosMesaEntradas', [StatsController::class, 'getcantidadRechazosMesaEntradas']);
 });
