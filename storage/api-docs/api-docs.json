@@ -89,7 +89,7 @@
         "/api/activeCase": {
             "post": {
                 "tags": [
-                    "auth"
+                    "case"
                 ],
                 "summary": "Get active cases",
                 "description": "Get active cases",
@@ -130,7 +130,7 @@
         "/api/activeCaseCount": {
             "post": {
                 "tags": [
-                    "auth"
+                    "case"
                 ],
                 "summary": "Get active cases count",
                 "description": "Get active cases count",
@@ -171,7 +171,7 @@
         "/api/archivedCase": {
             "post": {
                 "tags": [
-                    "auth"
+                    "case"
                 ],
                 "summary": "Get archived cases",
                 "description": "Get archived cases",
@@ -212,7 +212,7 @@
         "/api/archivedCaseCount": {
             "post": {
                 "tags": [
-                    "auth"
+                    "case"
                 ],
                 "summary": "Get archived cases count",
                 "description": "Get archived cases count",
@@ -250,13 +250,54 @@
                 }
             }
         },
-        "/api/averageCaseTime": {
+        "/api/process": {
             "post": {
                 "tags": [
-                    "auth"
+                    "process"
                 ],
-                "summary": "Get average resolution time",
-                "description": "Get average resolution time",
+                "summary": "Get processes",
+                "description": "Get processes",
+                "operationId": "getProcesses",
+                "responses": {
+                    "200": {
+                        "description": "Processes",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "401 Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "error": "Unauthorized"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "500 internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "500 internal server error"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/stats/averageCaseTime": {
+            "post": {
+                "tags": [
+                    "stats"
+                ],
+                "summary": "Get average resolution time (in hours)",
+                "description": "Get average resolution time (in hours)",
                 "operationId": "getAverageCaseTime",
                 "responses": {
                     "200": {
@@ -291,17 +332,58 @@
                 }
             }
         },
-        "/api/process": {
+        "/api/stats/cantidadRechazosMesaEntradas": {
             "post": {
                 "tags": [
-                    "auth"
+                    "stats"
                 ],
-                "summary": "Get processes",
-                "description": "Get processes",
-                "operationId": "getProcesses",
+                "summary": "Cantidad de rechazos por parte de mesa de entradas",
+                "description": "Cantidad de rechazos por parte de mesa de entradas",
+                "operationId": "getcantidadRechazosMesaEntradas",
                 "responses": {
                     "200": {
-                        "description": "Processes",
+                        "description": "Cantidad de rechazos por parte de mesa de entradas",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "401 Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "error": "Unauthorized"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "500 internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "500 internal server error"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/stats/cantidadRechazosLegales": {
+            "post": {
+                "tags": [
+                    "stats"
+                ],
+                "summary": "Cantidad de rechazos por parte de legales",
+                "description": "Cantidad de rechazos por parte de legales",
+                "operationId": "getcantidadRechazosLegales",
+                "responses": {
+                    "200": {
+                        "description": "Cantidad de rechazos por parte de legales",
                         "content": {
                             "application/json": {
                                 "schema": {},
