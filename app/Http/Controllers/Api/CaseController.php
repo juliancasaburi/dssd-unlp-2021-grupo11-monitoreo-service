@@ -272,12 +272,12 @@ class CaseController extends Controller
 
         $totalHours = 0;
 
-        foreach($data as $case){
+        foreach ($data as $case) {
             $start = strtotime($case['start']);
             $end = strtotime($case['end_date']);
             //$end = strtotime((new DateTime('now'))->format('Y-m-d H:i:s')); // test
-            $totalHours += abs($end - $start)/(60*60);
-        }     
+            $totalHours += abs($end - $start) / (60 * 60);
+        }
 
         try {
             return response()->json(
