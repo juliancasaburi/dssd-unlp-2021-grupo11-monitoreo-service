@@ -41,10 +41,9 @@ Route::group(['middleware' => ['bonitaProtectedRoute']], function () {
     /* Case */
     Route::get('activeCase', [CaseController::class, 'getActiveCases']);
     Route::get('archivedCase', [CaseController::class, 'getArchivedCases']);
-    Route::get('activeCaseCount', [CaseController::class, 'getActiveCaseCount']);
-    Route::get('averageCaseTime', [CaseController::class, 'getAverageCaseTime']);
 
     /* Stats */
-    Route::get('stats/cantidadRechazosLegales', [StatsController::class, 'getcantidadRechazosLegales']);
-    Route::get('stats/cantidadRechazosMesaEntradas', [StatsController::class, 'getcantidadRechazosMesaEntradas']);
+    Route::get('stats/averageCaseTime', [StatsController::class, 'getAverageCaseTime']);
+    Route::get('stats/cantidadRechazosLegales', [StatsController::class, 'getCantidadRechazosLegales']);
+    Route::get('stats/cantidadRechazosMesaEntradas', [StatsController::class, 'getCantidadRechazosMesaEntradas']);
 });

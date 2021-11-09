@@ -17,7 +17,7 @@ class ProcessController extends Controller
      *    summary="Get processes",
      *    description="Get processes",
      *    operationId="getProcesses",
-     *    tags={"auth"},
+     *    tags={"process"},
      *    @OA\Response(
      *       response=200,
      *       description="Processes",
