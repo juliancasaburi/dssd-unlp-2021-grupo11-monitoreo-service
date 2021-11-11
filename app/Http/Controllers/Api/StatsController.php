@@ -63,9 +63,10 @@ class StatsController extends Controller
         }
 
         try {
-            return response()->json(
-                $totalHours / count($data)
-            );
+            if(!empty($data))
+                return response()->json($totalHours / count($data));
+            else
+                return null;
         } catch (ConnectionException $e) {
             return response()->json("500 Internal Server Error", 500);
         }
