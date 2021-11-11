@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use App\Helpers\URLHelper;
+use App\Helpers\BonitaAdminLoginHelper;
 
 class AuthController extends Controller
 {
@@ -79,16 +80,13 @@ class AuthController extends Controller
             $urlHelper = new URLHelper();
             $apiLoginUrl = $urlHelper->getBonitaEndpointURL('/loginservice');
 
-            $bonitaLoginResponse = Http::asForm()->post($apiLoginUrl, [
-                'username' => config('services.bonita.admin_user'),
-                'password' => config('services.bonita.admin_password'),
-                'redirect' => 'false',
-            ]);
-            if ($bonitaLoginResponse->status() != 204)
+            $bonitaAdminLoginHelper = new BonitaAdminLoginHelper();
+            $bonitaAdminLoginResponse = $bonitaAdminLoginHelper->login();
+            if ($bonitaAdminLoginResponse->status() != 204)
                 return response()->json("500 Internal Server Error", 500);
             
-            $jsessionid = $bonitaLoginResponse->cookies()->toArray()[1]['Value'];
-            $xBonitaAPIToken = $bonitaLoginResponse->cookies()->toArray()[2]['Value'];
+            $jsessionid = $bonitaAdminLoginResponse->cookies()->toArray()[1]['Value'];
+            $xBonitaAPIToken = $bonitaAdminLoginResponse->cookies()->toArray()[2]['Value'];
 
             $userData = Http::withHeaders([
                 'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
