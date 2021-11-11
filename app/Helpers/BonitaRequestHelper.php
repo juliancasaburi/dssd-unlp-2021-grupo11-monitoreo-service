@@ -12,7 +12,7 @@ class BonitaRequestHelper
      * @param  string $endpointName
      * @return string
      */
-    private function getBonitaServerURL()
+    private static function getBonitaServerURL()
     {
         return config('services.bonita.api_url');
     }
@@ -24,12 +24,12 @@ class BonitaRequestHelper
      * @param  string $xBonitaAPIToken
      * @return mixed
      */
-    public function doTheRequest(string $endpointName, $jsessionid, $xBonitaAPIToken)
+    public static function doTheRequest(string $endpointName, $jsessionid, $xBonitaAPIToken)
     {
         $response = Http::withHeaders([
             'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
             'X-Bonita-API-Token' => $xBonitaAPIToken,
-        ])->get($this->getBonitaServerURL() . $endpointName);
+        ])->get(Self::getBonitaServerURL() . $endpointName);
 
         return $response->json();
     }

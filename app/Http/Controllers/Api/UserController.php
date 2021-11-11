@@ -50,8 +50,7 @@ class UserController extends Controller
             $jsessionid = $request->cookie('JSESSIONID');
             $xBonitaAPIToken = $request->cookie('X-Bonita-API-Token');
 
-            $bonitaRequestHelper = new BonitaRequestHelper();
-            $response = $bonitaRequestHelper->doTheRequest('/API/identity/user?p=0', $jsessionid, $xBonitaAPIToken);
+            $response = BonitaRequestHelper::doTheRequest('/API/identity/user?p=0', $jsessionid, $xBonitaAPIToken);
 
             return response()->json($response);
         } catch (ConnectionException $e) {
