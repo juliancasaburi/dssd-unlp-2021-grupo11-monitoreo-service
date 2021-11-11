@@ -77,11 +77,9 @@ class AuthController extends Controller
         }
 
         try {
-            $urlHelper = new URLHelper();
-            $apiLoginUrl = $urlHelper->getBonitaEndpointURL('/loginservice');
+            $apiLoginUrl = URLHelper::getBonitaEndpointURL('/loginservice');
 
-            $bonitaAdminLoginHelper = new BonitaAdminLoginHelper();
-            $bonitaAdminLoginResponse = $bonitaAdminLoginHelper->login();
+            $bonitaAdminLoginResponse = BonitaAdminLoginHelper::login();
             if ($bonitaAdminLoginResponse->status() != 204)
                 return response()->json("500 Internal Server Error", 500);
             
@@ -91,14 +89,14 @@ class AuthController extends Controller
             $userData = Http::withHeaders([
                 'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
                 'X-Bonita-API-Token' => $xBonitaAPIToken,
-            ])->get($urlHelper->getBonitaEndpointURL("/API/identity/user?s={$credentials['username']}&f=enabled=true"));
+            ])->get(URLHelper::getBonitaEndpointURL("/API/identity/user?s={$credentials['username']}&f=enabled=true"));
 
             $userId = head($userData->json())['id'];
 
             $membershipData = Http::withHeaders([
                 'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
                 'X-Bonita-API-Token' => $xBonitaAPIToken,
-            ])->get($urlHelper->getBonitaEndpointURL("/API/identity/membership?p=0&c=10&f=user_id={$userId}&d=role_id"));
+            ])->get(URLHelper::getBonitaEndpointURL("/API/identity/membership?p=0&c=10&f=user_id={$userId}&d=role_id"));
 
             if(head($membershipData->json())['role_id']["displayName"] != 'Admin')
                 return response()->json("403 Forbidden", 403);
@@ -142,8 +140,7 @@ class AuthController extends Controller
     public function logout()
     {
         try {
-            $urlHelper = new URLHelper();
-            $apiUrl = $urlHelper->getBonitaEndpointURL('/logoutservice');
+            $apiUrl = URLHelper::getBonitaEndpointURL('/logoutservice');
 
             $response = Http::post($apiUrl);
 

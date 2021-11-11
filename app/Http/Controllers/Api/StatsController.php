@@ -11,18 +11,6 @@ use DateTime;
 
 class StatsController extends Controller
 {
-    private $caseHelper;
-
-    /**
-     * Instantiate a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->caseHelper = new CaseHelper();
-    }
-
     /**
      * Tiempo promedio resolución.
      *
@@ -60,7 +48,7 @@ class StatsController extends Controller
      */
     public function getAverageCaseTime(Request $request)
     {
-        $data = $this->caseHelper->getArchivedCasesData(
+        $data = CaseHelper::getArchivedCasesData(
             $request->cookie('JSESSIONID'),
             $request->cookie('X-Bonita-API-Token')
         );

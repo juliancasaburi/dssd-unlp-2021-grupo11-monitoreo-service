@@ -11,10 +11,9 @@ class BonitaAdminLoginHelper
      * Obtener headers
      *
      */
-    public function login()
+    public static function login()
     {
-        $urlHelper = new URLHelper();
-        $apiLoginUrl = $urlHelper->getBonitaEndpointURL('/loginservice');
+        $apiLoginUrl = URLHelper::getBonitaEndpointURL('/loginservice');
 
         return Http::asForm()->post($apiLoginUrl, [
             'username' => config('services.bonita.admin_user'),

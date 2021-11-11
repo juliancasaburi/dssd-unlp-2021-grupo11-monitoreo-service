@@ -9,18 +9,6 @@ use App\Helpers\CaseHelper;
 
 class CaseController extends Controller
 {
-    private $caseHelper;
-
-    /**
-     * Instantiate a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->caseHelper = new CaseHelper();
-    }
-
     /**
      * Get active cases.
      *
@@ -59,7 +47,7 @@ class CaseController extends Controller
     public function getActiveCases(Request $request)
     {
         try {
-            return response()->json($this->caseHelper->getActiveCasesData(
+            return response()->json(CaseHelper::getActiveCasesData(
                 $request->cookie('JSESSIONID'),
                 $request->cookie('X-Bonita-API-Token')
             ));
@@ -107,7 +95,7 @@ class CaseController extends Controller
     {
         try {
             return response()->json(
-                count($this->caseHelper->getActiveCasesData(
+                count(CaseHelper::getActiveCasesData(
                     $request->cookie('JSESSIONID'),
                     $request->cookie('X-Bonita-API-Token')
                 ))
@@ -155,7 +143,7 @@ class CaseController extends Controller
     public function getArchivedCases(Request $request)
     {
         try {
-            return response()->json($this->caseHelper->getArchivedCasesData(
+            return response()->json(CaseHelper::getArchivedCasesData(
                 $request->cookie('JSESSIONID'),
                 $request->cookie('X-Bonita-API-Token')
             ));
@@ -203,7 +191,7 @@ class CaseController extends Controller
     {
         try {
             return response()->json(
-                count($this->caseHelper->getArchivedCasesData(
+                count(CaseHelper::getArchivedCasesData(
                     $request->cookie('JSESSIONID'),
                     $request->cookie('X-Bonita-API-Token')
                 ))
