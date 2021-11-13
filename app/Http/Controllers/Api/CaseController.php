@@ -143,7 +143,7 @@ class CaseController extends Controller
     public function getArchivedCases(Request $request)
     {
         try {
-            return response()->json(CaseHelper::getArchivedCasesData(
+            return response()->json(CaseHelper::getArchivedCasesDataWithStats(
                 $request->cookie('JSESSIONID'),
                 $request->cookie('X-Bonita-API-Token')
             ));
