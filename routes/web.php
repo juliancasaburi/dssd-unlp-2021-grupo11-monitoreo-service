@@ -19,12 +19,3 @@ use App\Http\Controllers\Web\SociedadAnonimaController;
 
 Auth::routes(['verify' => true]);
 Route::get('/', [App\Http\Controllers\Web\HomeController::class, 'index'])->name('web.index');
-
-/*Email example */
-Route::get('/emailTest', function(){
-    $email = new WelcomeMailable;
-    Mail::to('someEmailAddress@domain')->send($email);
-});
-
-/* Info pública S.A */
-Route::get('/sa/{numeroHash}', [SociedadAnonimaController::class, 'infoPublicaSA']);
