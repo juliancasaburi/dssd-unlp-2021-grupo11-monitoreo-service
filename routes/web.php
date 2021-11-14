@@ -1,10 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Mail\WelcomeMailable;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Web\SociedadAnonimaController;
 
 /*
 |--------------------------------------------------------------------------
