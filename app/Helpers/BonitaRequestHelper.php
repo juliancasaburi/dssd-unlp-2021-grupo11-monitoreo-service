@@ -21,10 +21,9 @@ class BonitaRequestHelper
      * Do a request.
      *
      * @param  string $jsessionid
-     * @param  string $xBonitaAPIToken
      * @return mixed
      */
-    public static function doTheRequest(string $endpointName, $jsessionid, $xBonitaAPIToken)
+    public static function doTheRequest(string $endpointName, $jsessionid)
     {
         $response = Http::withHeaders([
             'Cookie' => 'JSESSIONID=' . $jsessionid
