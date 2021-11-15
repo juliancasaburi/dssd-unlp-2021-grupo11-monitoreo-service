@@ -27,8 +27,7 @@ class BonitaRequestHelper
     public static function doTheRequest(string $endpointName, $jsessionid, $xBonitaAPIToken)
     {
         $response = Http::withHeaders([
-            'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
-            'X-Bonita-API-Token' => $xBonitaAPIToken,
+            'Cookie' => 'JSESSIONID=' . $jsessionid
         ])->get(Self::getBonitaServerURL() . $endpointName);
 
         return $response->json();
