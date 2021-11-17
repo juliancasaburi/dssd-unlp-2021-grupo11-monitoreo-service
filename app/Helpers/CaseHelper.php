@@ -21,11 +21,11 @@ class CaseHelper
             'cantidad_rechazos_area_legales'
         )->whereIn('bonita_case_id', Arr::pluck($bonitaData, ['rootCaseId']))
         ->get();
-        foreach ($bonitaData as $data) {
+        foreach ($bonitaData as &$data) {
             $data['cantidad_rechazos_mesa_entradas'] = $dbData->firstWhere('bonita_case_id', $data['rootCaseId'])->cantidad_rechazos_mesa_entradas;
             $data['cantidad_rechazos_area_legales'] = $dbData->firstWhere('bonita_case_id', $data['rootCaseId'])->cantidad_rechazos_area_legales;
         }
-        return $data;
+        return $bonitaData;
     }
 
 
