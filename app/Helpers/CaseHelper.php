@@ -36,7 +36,7 @@ class CaseHelper
      * @param  string $xBonitaAPIToken
      * @return array
      */
-    private static function getActiveCasesData($jsessionid, $xBonitaAPIToken)
+    public static function getActiveCasesData($jsessionid, $xBonitaAPIToken)
     {
         return BonitaRequestHelper::doTheRequest('/API/bpm/case?p=0', $jsessionid, $xBonitaAPIToken);
     }
@@ -61,7 +61,7 @@ class CaseHelper
      * @param  string $xBonitaAPIToken
      * @return array
      */
-    private static function getArchivedCasesData($jsessionid, $xBonitaAPIToken)
+    public static function getArchivedCasesData($jsessionid, $xBonitaAPIToken)
     {
         return BonitaRequestHelper::doTheRequest('/API/bpm/archivedCase?p=0', $jsessionid, $xBonitaAPIToken);
     }
