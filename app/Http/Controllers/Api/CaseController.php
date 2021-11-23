@@ -47,7 +47,7 @@ class CaseController extends Controller
     public function getActiveCases(Request $request)
     {
         try {
-            return response()->json(CaseHelper::getActiveCasesData(
+            return response()->json(CaseHelper::getActiveCasesDataWithStats(
                 $request->cookie('JSESSIONID'),
                 $request->cookie('X-Bonita-API-Token')
             ));
