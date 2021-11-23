@@ -82,7 +82,7 @@ class AuthController extends Controller
             $bonitaAdminLoginResponse = BonitaAdminLoginHelper::login();
             if ($bonitaAdminLoginResponse->status() != 204)
                 return response()->json("500 Internal Server Error", 500);
-            
+
             $jsessionid = $bonitaAdminLoginResponse->cookies()->toArray()[1]['Value'];
             $xBonitaAPIToken = $bonitaAdminLoginResponse->cookies()->toArray()[2]['Value'];
 
@@ -98,7 +98,7 @@ class AuthController extends Controller
                 'X-Bonita-API-Token' => $xBonitaAPIToken,
             ])->get(URLHelper::getBonitaEndpointURL("/API/identity/membership?p=0&c=10&f=user_id={$userId}&d=role_id"));
 
-            if(head($membershipData->json())['role_id']["displayName"] != 'Admin')
+            if (head($membershipData->json())['role_id']["displayName"] != 'Admin')
                 return response()->json("403 Forbidden", 403);
 
             $response = Http::asForm()->post($apiLoginUrl, [
@@ -135,14 +135,20 @@ class AuthController extends Controller
      *    ),
      * )
      * 
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
+    public function logout(Request $request)
     {
         try {
-            $apiUrl = URLHelper::getBonitaEndpointURL('/logoutservice');
+            $jsessionid = $request->cookie('JSESSIONID');
+            $xBonitaAPIToken = $request->cookie('X-Bonita-API-Token');
 
-            $response = Http::post($apiUrl);
+            $apiUrl = URLHelper::getBonitaEndpointURL('/logoutservice');
+            $response = Http::withHeaders([
+                'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
+                'X-Bonita-API-Token' => $xBonitaAPIToken,
+            ])->post($apiUrl);
 
             if ($response->status() == 401)
                 return response()->json("401 Unauthorized", 401);
