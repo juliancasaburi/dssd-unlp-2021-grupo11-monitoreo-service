@@ -76,12 +76,8 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        try {
             $apiLoginUrl = URLHelper::getBonitaEndpointURL('/loginservice');
-
             $bonitaAdminLoginResponse = BonitaAdminLoginHelper::login();
-            if ($bonitaAdminLoginResponse->status() != 204)
-                return response()->json("500 Internal Server Error", 500);
 
             $jsessionid = $bonitaAdminLoginResponse->cookies()->toArray()[1]['Value'];
             $xBonitaAPIToken = $bonitaAdminLoginResponse->cookies()->toArray()[2]['Value'];
@@ -89,14 +85,18 @@ class AuthController extends Controller
             $userData = Http::withHeaders([
                 'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
                 'X-Bonita-API-Token' => $xBonitaAPIToken,
-            ])->get(URLHelper::getBonitaEndpointURL("/API/identity/user?s={$credentials['username']}&f=enabled=true"));
+            ])
+            ->get(URLHelper::getBonitaEndpointURL("/API/identity/user?s={$credentials['username']}&f=enabled=true"))
+            ->throw();
 
             $userId = head($userData->json())['id'];
 
             $membershipData = Http::withHeaders([
                 'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
                 'X-Bonita-API-Token' => $xBonitaAPIToken,
-            ])->get(URLHelper::getBonitaEndpointURL("/API/identity/membership?p=0&c=10&f=user_id={$userId}&d=role_id"));
+            ])
+            ->get(URLHelper::getBonitaEndpointURL("/API/identity/membership?p=0&c=10&f=user_id={$userId}&d=role_id"))
+            ->throw();
 
             if (head($membershipData->json())['role_id']["displayName"] != 'Admin')
                 return response()->json("403 Forbidden", 403);
@@ -105,14 +105,9 @@ class AuthController extends Controller
                 'username' => $credentials["username"],
                 'password' => $credentials['password'],
                 'redirect' => 'false',
-            ]);
-            if ($response->status() == 401)
-                return response()->json("401 Unauthorized", 401);
+            ])->throw();
 
             return $this->respondWithCookies($response->cookies()->toArray());
-        } catch (ConnectionException $e) {
-            return response()->json("500 Internal Server Error", 500);
-        }
     }
 
     /**
@@ -145,13 +140,12 @@ class AuthController extends Controller
             $xBonitaAPIToken = $request->cookie('X-Bonita-API-Token');
 
             $apiUrl = URLHelper::getBonitaEndpointURL('/logoutservice');
-            $response = Http::withHeaders([
+            Http::withHeaders([
                 'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
                 'X-Bonita-API-Token' => $xBonitaAPIToken,
-            ])->post($apiUrl);
-
-            if ($response->status() == 401)
-                return response()->json("401 Unauthorized", 401);
+            ])
+            ->post($apiUrl)
+            ->throw();
 
             return response()->json(['message' => 'Successfully logged out'], 200);
         } catch (ConnectionException $e) {
