@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Client\ConnectionException;
 use App\Helpers\BonitaRequestHelper;
 
 class UserController extends Controller
@@ -46,15 +45,11 @@ class UserController extends Controller
      */
     public function getUsers(Request $request)
     {
-        try {
-            $jsessionid = $request->cookie('JSESSIONID');
-            $xBonitaAPIToken = $request->cookie('X-Bonita-API-Token');
+        $jsessionid = $request->cookie('JSESSIONID');
+        $xBonitaAPIToken = $request->cookie('X-Bonita-API-Token');
 
-            $response = BonitaRequestHelper::doTheRequest('/API/identity/user?p=0', $jsessionid, $xBonitaAPIToken);
+        $response = BonitaRequestHelper::doTheRequest('/API/identity/user?p=0', $jsessionid, $xBonitaAPIToken);
 
-            return response()->json($response);
-        } catch (ConnectionException $e) {
-            return response()->json("500 Internal Server Error", 500);
-        }
+        return response()->json($response);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Client\ConnectionException;
 use App\Helpers\CaseHelper;
 
 class CaseController extends Controller
@@ -46,14 +45,10 @@ class CaseController extends Controller
      */
     public function getActiveCases(Request $request)
     {
-        try {
-            return response()->json(CaseHelper::getActiveCasesDataWithStats(
-                $request->cookie('JSESSIONID'),
-                $request->cookie('X-Bonita-API-Token')
-            ));
-        } catch (ConnectionException $e) {
-            return response()->json("500 Internal Server Error", 500);
-        }
+        return response()->json(CaseHelper::getActiveCasesDataWithStats(
+            $request->cookie('JSESSIONID'),
+            $request->cookie('X-Bonita-API-Token')
+        ));
     }
 
     /**
@@ -93,16 +88,12 @@ class CaseController extends Controller
      */
     public function getActiveCaseCount(Request $request)
     {
-        try {
-            return response()->json(
-                count(CaseHelper::getActiveCasesData(
-                    $request->cookie('JSESSIONID'),
-                    $request->cookie('X-Bonita-API-Token')
-                ))
-            );
-        } catch (ConnectionException $e) {
-            return response()->json("500 Internal Server Error", 500);
-        }
+        return response()->json(
+            count(CaseHelper::getActiveCasesData(
+                $request->cookie('JSESSIONID'),
+                $request->cookie('X-Bonita-API-Token')
+            ))
+        );
     }
 
     /**
@@ -142,14 +133,10 @@ class CaseController extends Controller
      */
     public function getArchivedCases(Request $request)
     {
-        try {
-            return response()->json(CaseHelper::getArchivedCasesDataWithStats(
-                $request->cookie('JSESSIONID'),
-                $request->cookie('X-Bonita-API-Token')
-            ));
-        } catch (ConnectionException $e) {
-            return response()->json("500 Internal Server Error", 500);
-        }
+        return response()->json(CaseHelper::getArchivedCasesDataWithStats(
+            $request->cookie('JSESSIONID'),
+            $request->cookie('X-Bonita-API-Token')
+        ));
     }
 
     /**
@@ -189,15 +176,11 @@ class CaseController extends Controller
      */
     public function getArchivedCaseCount(Request $request)
     {
-        try {
-            return response()->json(
-                count(CaseHelper::getArchivedCasesData(
-                    $request->cookie('JSESSIONID'),
-                    $request->cookie('X-Bonita-API-Token')
-                ))
-            );
-        } catch (ConnectionException $e) {
-            return response()->json("500 Internal Server Error", 500);
-        }
+        return response()->json(
+            count(CaseHelper::getArchivedCasesData(
+                $request->cookie('JSESSIONID'),
+                $request->cookie('X-Bonita-API-Token')
+            ))
+        );
     }
 }

@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Client\ConnectionException;
 use App\Helpers\CaseHelper;
-use DateTime;
 
 class StatsController extends Controller
 {
@@ -58,18 +56,13 @@ class StatsController extends Controller
         foreach ($data as $case) {
             $start = strtotime($case['start']);
             $end = strtotime($case['end_date']);
-            //$end = strtotime((new DateTime('now'))->format('Y-m-d H:i:s')); // test
             $totalHours += abs($end - $start) / (60 * 60);
         }
 
-        try {
-            if(!empty($data))
-                return response()->json($totalHours / count($data));
-            else
-                return null;
-        } catch (ConnectionException $e) {
-            return response()->json("500 Internal Server Error", 500);
-        }
+        if (!empty($data))
+            return response()->json($totalHours / count($data));
+        else
+            return null;
     }
 
     /**
