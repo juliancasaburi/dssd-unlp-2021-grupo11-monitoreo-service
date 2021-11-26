@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use App\Helpers\URLHelper;
 use App\Helpers\BonitaAdminLoginHelper;
@@ -76,38 +75,38 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-            $apiLoginUrl = URLHelper::getBonitaEndpointURL('/loginservice');
-            $bonitaAdminLoginResponse = BonitaAdminLoginHelper::login();
+        $apiLoginUrl = URLHelper::getBonitaEndpointURL('/loginservice');
+        $bonitaAdminLoginResponse = BonitaAdminLoginHelper::login();
 
-            $jsessionid = $bonitaAdminLoginResponse->cookies()->toArray()[1]['Value'];
-            $xBonitaAPIToken = $bonitaAdminLoginResponse->cookies()->toArray()[2]['Value'];
+        $jsessionid = $bonitaAdminLoginResponse->cookies()->toArray()[1]['Value'];
+        $xBonitaAPIToken = $bonitaAdminLoginResponse->cookies()->toArray()[2]['Value'];
 
-            $userData = Http::withHeaders([
-                'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
-                'X-Bonita-API-Token' => $xBonitaAPIToken,
-            ])
+        $userData = Http::withHeaders([
+            'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
+            'X-Bonita-API-Token' => $xBonitaAPIToken,
+        ])
             ->get(URLHelper::getBonitaEndpointURL("/API/identity/user?s={$credentials['username']}&f=enabled=true"))
             ->throw();
 
-            $userId = head($userData->json())['id'];
+        $userId = head($userData->json())['id'];
 
-            $membershipData = Http::withHeaders([
-                'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
-                'X-Bonita-API-Token' => $xBonitaAPIToken,
-            ])
+        $membershipData = Http::withHeaders([
+            'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
+            'X-Bonita-API-Token' => $xBonitaAPIToken,
+        ])
             ->get(URLHelper::getBonitaEndpointURL("/API/identity/membership?p=0&c=10&f=user_id={$userId}&d=role_id"))
             ->throw();
 
-            if (head($membershipData->json())['role_id']["displayName"] != 'Admin')
-                return response()->json("403 Forbidden", 403);
+        if (head($membershipData->json())['role_id']["displayName"] != 'Admin')
+            return response()->json("403 Forbidden", 403);
 
-            $response = Http::asForm()->post($apiLoginUrl, [
-                'username' => $credentials["username"],
-                'password' => $credentials['password'],
-                'redirect' => 'false',
-            ])->throw();
+        $response = Http::asForm()->post($apiLoginUrl, [
+            'username' => $credentials["username"],
+            'password' => $credentials['password'],
+            'redirect' => 'false',
+        ])->throw();
 
-            return $this->respondWithCookies($response->cookies()->toArray());
+        return $this->respondWithCookies($response->cookies()->toArray());
     }
 
     /**
@@ -135,22 +134,18 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        try {
-            $jsessionid = $request->cookie('JSESSIONID');
-            $xBonitaAPIToken = $request->cookie('X-Bonita-API-Token');
+        $jsessionid = $request->cookie('JSESSIONID');
+        $xBonitaAPIToken = $request->cookie('X-Bonita-API-Token');
 
-            $apiUrl = URLHelper::getBonitaEndpointURL('/logoutservice');
-            Http::withHeaders([
-                'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
-                'X-Bonita-API-Token' => $xBonitaAPIToken,
-            ])
+        $apiUrl = URLHelper::getBonitaEndpointURL('/logoutservice');
+        Http::withHeaders([
+            'Cookie' => 'JSESSIONID=' . $jsessionid . ';' . 'X-Bonita-API-Token=' . $xBonitaAPIToken,
+            'X-Bonita-API-Token' => $xBonitaAPIToken,
+        ])
             ->post($apiUrl)
             ->throw();
 
-            return response()->json(['message' => 'Successfully logged out'], 200);
-        } catch (ConnectionException $e) {
-            return response()->json("500 Internal Server Error", 500);
-        }
+        return response()->json(['message' => 'Successfully logged out'], 200);
     }
 
 
@@ -168,7 +163,7 @@ class AuthController extends Controller
             'X-Bonita-API-Token' => $cookieArray[2]['Value']
         ]]);
 
-        foreach ($cookieArray as $cookie){
+        foreach ($cookieArray as $cookie) {
             $response->cookie(cookie($cookie['Name'], $cookie['Value']));
         }
 
