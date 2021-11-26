@@ -9,7 +9,6 @@ class BonitaRequestHelper
     /**
      * Obtener url de Bonita REST API.
      *
-     * @param  string $endpointName
      * @return string
      */
     private static function getBonitaServerURL()
@@ -18,17 +17,18 @@ class BonitaRequestHelper
     }
 
     /**
-     * Do a request.
+     * Do a GET request.
      *
+     * @param  string $endpoint
      * @param  string $jsessionid
      * @return mixed
      */
-    public static function doTheRequest(string $endpointName, $jsessionid)
+    public static function doTheRequest(string $endpoint, $jsessionid)
     {
         $response = Http::withHeaders([
             'Cookie' => 'JSESSIONID=' . $jsessionid
-        ])->get(Self::getBonitaServerURL() . $endpointName);
+        ])->get(Self::getBonitaServerURL() . $endpoint);
 
-        return $response->json();
+        return $response->throw()->json();
     }
 }
